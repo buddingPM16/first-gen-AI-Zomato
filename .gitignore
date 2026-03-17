@@ -2,4 +2,3 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-phase3_indexing_storage/zomato.db
