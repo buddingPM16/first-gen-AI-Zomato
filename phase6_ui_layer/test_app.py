@@ -18,7 +18,8 @@ def test_streamlit_app_basic_render():
     # Check form inputs exist and have correct defaults
     assert at.selectbox[0].value == "Indiranagar"
     assert at.selectbox[1].value == "Italian"
-    assert at.number_input[0].value == 3000
+    assert at.number_input[0].value == 2
+    assert at.number_input[1].value == 3000
     assert at.slider[0].value == 4.0
     
     # Ensure there is no error block by default

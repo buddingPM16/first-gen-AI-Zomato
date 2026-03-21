@@ -165,8 +165,9 @@ with st.form("preference_form"):
         default_loc = locations_list.index("Indiranagar") if "Indiranagar" in locations_list else 0
         place = st.selectbox("Location / Neighborhood", options=locations_list, index=default_loc)
         
-        # Direct budget input without a checkbox toggle
-        max_price = st.number_input("Max Budget for Two (₹)", min_value=100, max_value=10000, value=3000, step=100, help="Set to maximum (10,000) for virtually no budget limit.")
+        # Group Size & Total Budget inputs
+        num_people = st.number_input("Number of People", min_value=1, max_value=50, value=2, step=1)
+        total_budget = st.number_input("Total Budget (₹)", min_value=100, max_value=100000, value=3000, step=500, help="Total group budget. Set to 100000 for no strict limit.")
         
     with col2:
         # Dynamically fetch cuisines for the selected location
@@ -177,6 +178,8 @@ with st.form("preference_form"):
         default_cuisine = cuisines_list.index("Italian") if "Italian" in cuisines_list else 0
         cuisine = st.selectbox("Cuisine Preference", options=cuisines_list, index=default_cuisine)
         
+        # Spacer for neat alignment
+        st.markdown("<div style='height: 74px;'></div>", unsafe_allow_html=True)
         # Direct slider without a checkbox toggle
         min_rating = st.slider("Minimum Rating", min_value=0.0, max_value=5.0, value=4.0, step=0.1, help="Set to 0.0 to search all ratings.")
         
@@ -190,13 +193,17 @@ if submit_button:
     if not place or not cuisine:
         st.error("Please provide both a location and a cuisine preference.")
     else:
-        with st.spinner(f"Searching for the best {cuisine} spots in {place} and asking AI to review them..."):
+        # Calculate the equivalent Zomato 'cost_for_two' metric internally based on per-person math
+        per_person_budget = total_budget / num_people
+        mapped_max_price_for_two = per_person_budget * 2
+        
+        with st.spinner(f"Searching for the best {cuisine} spots in {place} for {num_people} people..."):
             try:
                 # Call our core LLM engine
                 recommendation = generate_recommendation(
                     place=place,
                     cuisine=cuisine.lower(),
-                    max_price=float(max_price) if max_price is not None else None,
+                    max_price=float(mapped_max_price_for_two),
                     min_rating=float(min_rating) if min_rating is not None else None,
                     top_n=5
                 )
