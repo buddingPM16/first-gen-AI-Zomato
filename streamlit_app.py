@@ -82,6 +82,16 @@ st.markdown("""
         color: #4a5568;
     }
     
+    /* Slider Enhancements (Rating) */
+    .stSlider label {
+        font-weight: 700 !important;
+        color: #e23744 !important;
+        letter-spacing: 0.2px;
+    }
+    .stSlider [data-testid="stThumbValue"], .stSlider [data-testid="stTickBarMax"] {
+        font-weight: 700 !important;
+    }
+    
     /* Success/Message Cards */
     .stMarkdown, .stException {
         animation: fadeIn 0.5s ease-out;
@@ -181,7 +191,7 @@ with st.form("preference_form"):
         # Spacer for neat alignment
         st.markdown("<div style='height: 74px;'></div>", unsafe_allow_html=True)
         # Direct slider without a checkbox toggle
-        min_rating = st.slider("Minimum Rating", min_value=0.0, max_value=5.0, value=4.0, step=0.1, help="Set to 0.0 to search all ratings.")
+        min_rating = st.slider("⭐ Minimum Star Rating", min_value=0.0, max_value=5.0, value=4.0, step=0.1, help="Set to 0.0 to search all ratings.")
         
     st.markdown("<br>", unsafe_allow_html=True)
     # Center the form submit button
